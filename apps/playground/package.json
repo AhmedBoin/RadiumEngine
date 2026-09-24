@@ -1,0 +1,31 @@
+{
+  "name": "@radium-engine/playground",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Live harness for RadiumEngine: every feature in 2D and in 3D",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@radium-engine/core": "0.1.0",
+    "@radium-engine/react": "0.1.0",
+    "leaflet": "^1.9.4",
+    "maplibre-gl": "^5.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.12",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/three": "^0.169.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "~5.9.3",
+    "vite": "^6.0.0"
+  }
+}

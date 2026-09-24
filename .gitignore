@@ -1,0 +1,8 @@
+node_modules/
+dist/
+target/
+*.log
+.DS_Store
+apps/playground/dist/
+templates/starter/dist/
+templates/starter/src-tauri/target/

@@ -1,0 +1,17 @@
+[package]
+name = "radium-engine-starter"
+version = "0.1.0"
+description = "Starter desktop app for RadiumEngine"
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-fs = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# point this at the local checkout (or a published version)
+tauri-plugin-radium-engine = { path = "../../../packages/tauri/src-tauri" }

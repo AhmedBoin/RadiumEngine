@@ -1,0 +1,36 @@
+{
+  "name": "radium-engine-starter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Start any new RadiumEngine app from here: Vite + React + Tauri 2, 2D and 3D maps with offline tiles",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json --noEmit && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "desktop": "tauri dev"
+  },
+  "dependencies": {
+    "@radium-engine/core": "^0.1.0",
+    "@radium-engine/react": "^0.1.0",
+    "@radium-engine/tauri": "^0.1.0",
+    "@tauri-apps/api": "^2.0.0",
+    "@tauri-apps/plugin-fs": "^2.0.0",
+    "leaflet": "^1.9.4",
+    "maplibre-gl": "^5.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0",
+    "@types/leaflet": "^1.9.12",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/three": "^0.169.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "~5.9.3",
+    "vite": "^6.0.0"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "@radium-engine/tauri",
+  "version": "0.1.0",
+  "description": "Optional Rust accelerator for RadiumEngine: parallel tile prefetch, cache inspection and DEM sampling",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src-tauri",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "node ../../scripts/build-package.mjs packages/tauri",
+    "build:rust": "cargo build --manifest-path src-tauri/Cargo.toml"
+  },
+  "dependencies": {
+    "@radium-engine/core": "0.1.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3"
+  }
+}

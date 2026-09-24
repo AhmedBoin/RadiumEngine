@@ -1,0 +1,26 @@
+{
+  "name": "radium-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "RadiumEngine — a component based 2D/3D map and geo-object framework (Leaflet + MapLibre/three.js, terrain, offline tile cache, Tauri friendly)",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "check": "npm run build --workspace @radium-engine/core && node scripts/check-core.mjs",
+    "playground": "npm --workspace apps/playground run dev",
+    "clean": "node scripts/clean.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "typescript": "~5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

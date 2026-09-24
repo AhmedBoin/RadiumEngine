@@ -1,0 +1,46 @@
+{
+  "name": "@radium-engine/react",
+  "version": "0.1.0",
+  "description": "React components for RadiumEngine: one declarative tree rendered by Leaflet (2D) or MapLibre + three.js (3D)",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "node ../../scripts/build-package.mjs packages/react"
+  },
+  "dependencies": {
+    "@radium-engine/core": "0.1.0"
+  },
+  "peerDependencies": {
+    "leaflet": ">=1.9",
+    "maplibre-gl": ">=4",
+    "react": ">=18",
+    "react-dom": ">=18",
+    "three": ">=0.160"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.12",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "leaflet": "^1.9.4",
+    "maplibre-gl": "^5.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "three": "^0.169.0",
+    "@types/three": "^0.169.0",
+    "typescript": "~5.9.3"
+  }
+}

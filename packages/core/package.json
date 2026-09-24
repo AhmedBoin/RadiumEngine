@@ -1,0 +1,43 @@
+{
+  "name": "@radium-engine/core",
+  "version": "0.1.0",
+  "description": "Engine agnostic core of RadiumEngine: geo math, map providers, tile pipeline, cache adapters, DEM/elevation, motion and tracks",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./providers": {
+      "types": "./dist/providers/index.d.ts",
+      "import": "./dist/providers/index.js"
+    },
+    "./cache": {
+      "types": "./dist/cache/index.d.ts",
+      "import": "./dist/cache/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "node ../../scripts/build-package.mjs packages/core"
+  },
+  "peerDependencies": {
+    "geotiff": ">=2"
+  },
+  "peerDependenciesMeta": {
+    "geotiff": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3"
+  }
+}
