@@ -5,6 +5,7 @@
 // exactly that state, which is why the same tree works in both modes.
 import type {
   CacheConfig,
+  MapHit,
   DemSource,
   ImageryProvider,
   MapMode,
@@ -57,6 +58,12 @@ export type MapApi = {
     options?: { paddingPx?: number; durationMs?: number },
   ) => void;
   getCamera: () => CameraOptions;
+  /**
+   * What is under a point of the map container, in CSS px — resolved the same way a click is
+   * (screen-space hit test, see `interaction.tsx`). `null` when the point hits nothing
+   * pickable, or when no engine is mounted.
+   */
+  pick: (x: number, y: number) => MapHit | null;
   /** The raw engine map (Leaflet map / MapLibre map) for advanced use. */
   getEngineMap: () => unknown;
   /** @internal the engines register their implementations here */
@@ -68,6 +75,8 @@ export type EngineHandlers = {
   fitBounds: MapApi["fitBounds"];
   getCamera: () => CameraOptions;
   getEngineMap: () => unknown;
+  /** installed by the interaction layer when an engine is mounted */
+  pick?: (x: number, y: number) => MapHit | null;
 };
 
 export type MapEngineContextValue = {

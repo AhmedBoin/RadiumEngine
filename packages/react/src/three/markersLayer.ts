@@ -6,6 +6,7 @@
 // they never sink into the terrain). three.js sprites cannot do this in a
 // MapLibre custom layer, because "view space" there is mercator space.
 import type { CustomLayerInterface, Map as MapLibreMap } from "maplibre-gl";
+import { clearScreenProjection, publishScreenProjection } from "./screenProjection";
 
 export type MarkerContent = {
   id: string;
@@ -54,11 +55,20 @@ export function createMarkersLayer(
 
     render(_gl, options) {
       const matrix = options?.defaultProjectionData?.mainMatrix as ArrayLike<number> | undefined;
-      if (!matrix || live.size === 0) return;
 
       const canvas = map.getCanvas();
+
       const width = canvas.clientWidth || canvas.width || 1;
+
       const height = canvas.clientHeight || canvas.height || 1;
+
+
+      /* published before the early return: picking needs the projection as soon as the
+
+         engine exists, and a map with no markers yet is a normal startup */
+
+      publishScreenProjection(matrix, width, height);
+      if (!matrix || live.size === 0) return;
 
       for (const entry of live.values()) {
         const position = entry.content.position();
@@ -98,8 +108,10 @@ export function createMarkersLayer(
       }
     },
 
-    onRemove() {
+    
+onRemove() {
       live.clear();
+      clearScreenProjection();
     },
 
     sync() {

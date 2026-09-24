@@ -12,7 +12,12 @@
   "scripts": {
     "typecheck": "npm run typecheck --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
-    "check": "npm run build --workspace @radium-engine/core && node scripts/check-core.mjs",
+    "check": "npm run build --workspace @radium-engine/core && node scripts/check-core.mjs && node scripts/check-camera.mjs && node scripts/check-settings.mjs && node scripts/check-interaction.mjs && node scripts/check-package.mjs",
+    "check:core": "npm run build --workspace @radium-engine/core && node scripts/check-core.mjs",
+    "check:camera": "npm run build --workspace @radium-engine/core && node scripts/check-camera.mjs",
+    "check:settings": "npm run build --workspace @radium-engine/core && node scripts/check-settings.mjs",
+    "check:interaction": "npm run build --workspace @radium-engine/core && node scripts/check-interaction.mjs",
+    "check:package": "npm run build && node scripts/check-package.mjs",
     "playground": "npm --workspace apps/playground run dev",
     "clean": "node scripts/clean.mjs"
   },

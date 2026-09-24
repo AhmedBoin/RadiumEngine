@@ -1,6 +1,7 @@
 import {
   IMAGERY_PROVIDERS,
   TERRAIN_PROVIDERS,
+  type CameraMode,
   type LatLngAlt,
   type MapMode,
 } from "@radium-engine/react";
@@ -55,4 +56,33 @@ export type UiState = {
   motion: "smooth" | "jump";
   dropLines: boolean;
   objects: number;
+  /** camera: how the view follows the first simulated object */
+  cameraMode: CameraMode;
+  /** camera: where the followed object sits on screen (50 = centred) */
+  screenFractionPct: number;
+  /** FPV only: the bolted camera's mount angle */
+  fpvMountPitchDeg: number;
+};
+
+export const CAMERA_MODES: { id: CameraMode; label: string }[] = [
+  { id: "free", label: "Free (you fly)" },
+  { id: "follow", label: "Follow (auto pan)" },
+  { id: "chase", label: "Chase (3rd person)" },
+  { id: "fpv", label: "FPV (first person)" },
+];
+
+/** The persisted settings document: options + the camera the user tuned. */
+export const PLAYGROUND_SETTINGS_DEFAULTS: UiState = {
+  mode: "3d",
+  imagery: "ESRI.WorldImagery",
+  terrain: "aws-terrarium",
+  terrainEnabled: true,
+  smoothing: 1,
+  exaggeration: 1.3,
+  motion: "smooth",
+  dropLines: true,
+  objects: 3,
+  cameraMode: "free",
+  screenFractionPct: 55,
+  fpvMountPitchDeg: 0,
 };

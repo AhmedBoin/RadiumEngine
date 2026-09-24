@@ -37,6 +37,9 @@ offline tile/terrain cache.
 | 13 | [13-performance.md](./13-performance.md) | frame budget, tuning, what is expensive and what is not |
 | 14 | [14-troubleshooting.md](./14-troubleshooting.md) | everything that can go wrong, and why |
 | 15 | [15-migration-radium.md](./15-migration-radium.md) | moving an existing Radium-style map onto the packages |
+| 16 | [16-camera.md](./16-camera.md) | follow / chase / FPV cameras: modes, tuning, the maths, the checks |
+| 17 | [17-settings.md](./17-settings.md) | persisted options without the "everything is back to the defaults" trap |
+| 18 | [18-interaction.md](./18-interaction.md) | clicks, hovers, selection, measurement and undo |
 
 ## 60-second quick start
 

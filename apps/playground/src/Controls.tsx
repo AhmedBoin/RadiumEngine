@@ -6,7 +6,7 @@ import {
   type DemSource,
 } from "@radium-engine/react";
 import { useCallback, useState } from "react";
-import { imageryOptions, terrainOptions, type UiState } from "./scenario";
+import { CAMERA_MODES, imageryOptions, terrainOptions, type UiState } from "./scenario";
 
 export function Controls({
   ui,
@@ -179,6 +179,48 @@ export function Controls({
           onChange={(event) => update("objects", Number(event.target.value))}
         />
       </label>
+
+      {/* the camera: one declarative prop drives every mode (see <FollowCamera>) */}
+      <label>
+        Camera
+        <select
+          value={ui.cameraMode}
+          onChange={(event) => update("cameraMode", event.target.value as UiState["cameraMode"])}
+        >
+          {CAMERA_MODES.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <label>
+        Object on screen: {ui.screenFractionPct}%
+        <input
+          type="range"
+          min={20}
+          max={85}
+          step={5}
+          value={ui.screenFractionPct}
+          disabled={ui.cameraMode === "free" || ui.cameraMode === "fpv"}
+          onChange={(event) => update("screenFractionPct", Number(event.target.value))}
+        />
+      </label>
+
+      {ui.cameraMode === "fpv" ? (
+        <label>
+          FPV mount pitch: {ui.fpvMountPitchDeg}°
+          <input
+            type="range"
+            min={-30}
+            max={30}
+            step={5}
+            value={ui.fpvMountPitchDeg}
+            onChange={(event) => update("fpvMountPitchDeg", Number(event.target.value))}
+          />
+        </label>
+      ) : null}
 
       <div className="row">
         <button onClick={() => void prefetch()}>Prefetch area</button>

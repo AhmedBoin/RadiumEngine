@@ -39,6 +39,19 @@ templates/starter                         "start any new project from this"
 - **Elevation service**: real MSL elevation *and* the elevation as rendered
   (terrain-exaggeration aware) so icons, drop lines and objects sit exactly on the
   visible ground, never under it.
+- **Cameras**: `<FollowCamera target mode>` gives you `follow` (auto pan), `chase`
+  (third person, behind *and* above) and `fpv` (first person, `fixed` or `gimbal`), each
+  holding the object at a chosen screen fraction — solved in closed form per frame, so
+  altitude parallax, teleports and jittery feeds are handled instead of fought
+  ([docs/16-camera.md](docs/16-camera.md), verified by `npm run check:camera`).
+- **Persisted options**: `useSettings({ defaults, key })` keeps a settings document in a
+  Tauri file or `localStorage`, deep-merged with defaults, written *after* it has been
+  read — the trap where the UI saves its defaults over your file on every launch is closed
+  by construction ([docs/17-settings.md](docs/17-settings.md)).
+- **Interaction**: everything you draw is clickable (`onClick` / `onHover` / `onContextMenu`
+  on every item, with the geographic position of the hit), selection that survives a 2D ⇄ 3D
+  flip, live cursor readout, and measurement/undo helpers — picked in screen space, so one
+  implementation serves both engines ([docs/18-interaction.md](docs/18-interaction.md)).
 
 ## Quick start (React + Vite)
 
@@ -116,15 +129,25 @@ const ground = await elevation.at(30.0444, 31.2357);   // meters MSL, cached
 | [docs/13-performance.md](docs/13-performance.md) | frame budget, tuning, object limits |
 | [docs/14-troubleshooting.md](docs/14-troubleshooting.md) | every failure mode and its cause |
 | [docs/15-migration-radium.md](docs/15-migration-radium.md) | porting a proven map stack onto the packages |
+| [docs/16-camera.md](docs/16-camera.md) | follow / chase / FPV cameras: modes, tuning, the maths, the checks |
+| [docs/17-settings.md](docs/17-settings.md) | persisted options without the "everything is back to the defaults" trap |
+| [docs/18-interaction.md](docs/18-interaction.md) | clicks, hovers, selection, measurement and undo |
 
 ## Scripts
 
 ```bash
 npm run build       # build every package (esbuild + tsc declarations)
-npm run check       # build core, then run the assertion harness
+npm run check       # build core, then the assertion harness: core + camera + settings
 npm run typecheck   # strict type check of every package
 npm run playground  # live 2D/3D demo app
 ```
+
+Individual suites: `check-core` (geo, providers, tiles, DEM, motion, tracks, scene),
+`check-camera` (framing projected through a model of the map camera, plus the follow
+filter's properties), `check-settings` (merge, load-before-write, migrations),
+`check-interaction` (hit areas, tolerances, ranking, selection, measurement, undo) and
+`check-package` (exports resolve, no *optional* peer is imported statically, no peer asset
+import, core depends on nothing).
 
 ## Design rules
 

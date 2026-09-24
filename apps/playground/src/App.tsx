@@ -1,29 +1,33 @@
 import {
+  FollowCamera,
   MapProvider,
   MapView,
+  useSettings,
+  useSettingsStatus,
   type MapEngineOptions,
 } from "@radium-engine/react";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Controls } from "./Controls";
+import { Info } from "./Info";
 import { Scene } from "./Scene";
-import type { UiState } from "./scenario";
+import { PLAYGROUND_SETTINGS_DEFAULTS, type UiState } from "./scenario";
 
+/**
+ * Everything the panel can change is PERSISTED (localStorage here, a real file inside
+ * Tauri): the imagery, the terrain, the camera mode, the framing. Reload the page and the
+ * app comes back exactly as it was left — which is what `useSettings` is for. Note that
+ * nothing renders until `loaded` is true: mounting the map first would save the defaults
+ * over the stored document (that is the rule the store enforces, see `settings/store.ts`).
+ */
 export function App() {
-  const [ui, setUi] = useState<UiState>({
-    mode: "3d",
-    imagery: "ESRI.WorldImagery",
-    terrain: "aws-terrarium",
-    terrainEnabled: true,
-    smoothing: 1,
-    exaggeration: 1.3,
-    motion: "smooth",
-    dropLines: true,
-    objects: 3,
+  const { settings: ui, loaded, status, set, reset } = useSettings<UiState>({
+    defaults: PLAYGROUND_SETTINGS_DEFAULTS,
+    key: "radium-engine-playground.json",
+    debounceMs: 200,
   });
+  const statusLine = useSettingsStatus(status);
 
-  const update = useCallback(<K extends keyof UiState>(key: K, value: UiState[K]) => {
-    setUi((current) => ({ ...current, [key]: value }));
-  }, []);
+  const update = <K extends keyof UiState>(key: K, value: UiState[K]) => set({ [key]: value } as never);
 
   const options = useMemo<MapEngineOptions>(
     () => ({
@@ -37,15 +41,31 @@ export function App() {
     [ui.mode, ui.imagery, ui.terrain, ui.terrainEnabled, ui.smoothing, ui.exaggeration],
   );
 
+  if (!loaded) return <div className="boot">loading settings…</div>;
+
   return (
     <MapProvider options={options}>
       <div className="layout">
         <MapView className="map" />
+        {/* one declarative line: the camera follows the first simulated aircraft */}
+        <FollowCamera
+          target={ui.objects > 0 && ui.cameraMode !== "free" ? "uav-1" : null}
+          mode={ui.cameraMode}
+          tuning={{
+            screenFractionPct: ui.screenFractionPct,
+            chasePitchDeg: 42,
+            fpvModel: "gimbal",
+            fpvMountPitchDeg: ui.fpvMountPitchDeg,
+          }}
+        />
         <div className="panel">
           <h1>RadiumEngine</h1>
           <p className="hint">One scene, two engines: flip 2D / 3D and everything stays in place.</p>
           <Controls ui={ui} update={update} />
           <Scene ui={ui} />
+          <Info />
+          <div className="status">{statusLine}</div>
+          <button onClick={() => reset()}>Reset settings</button>
         </div>
       </div>
     </MapProvider>

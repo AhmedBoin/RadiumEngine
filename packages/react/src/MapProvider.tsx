@@ -12,6 +12,7 @@ import {
   type TerrainOptions,
 } from "@radium-engine/core";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { InteractionProvider } from "./interaction";
 import {
   EngineContext,
   type CameraOptions,
@@ -117,6 +118,7 @@ export function MapProvider({ options = {}, children }: MapProviderProps) {
       flyTo: (target, flyOptions) => handlersRef.current.flyTo?.(target, flyOptions),
       fitBounds: (bounds, fitOptions) => handlersRef.current.fitBounds?.(bounds, fitOptions),
       getCamera: () => handlersRef.current.getCamera?.() ?? camera,
+      pick: (x, y) => handlersRef.current.pick?.(x, y) ?? null,
       getEngineMap: () => handlersRef.current.getEngineMap?.(),
       bind: (handlers) => {
         handlersRef.current = { ...handlersRef.current, ...handlers };
@@ -158,5 +160,10 @@ export function MapProvider({ options = {}, children }: MapProviderProps) {
     [options, store, pipeline, elevation, imagery, terrainSource, camera, mode, api, ready, version, bump],
   );
 
-  return <EngineContext.Provider value={value}>{children}</EngineContext.Provider>;
+  return (
+    <EngineContext.Provider value={value}>
+      {/* inside the engine context, so the item components can register themselves */}
+      <InteractionProvider>{children}</InteractionProvider>
+    </EngineContext.Provider>
+  );
 }

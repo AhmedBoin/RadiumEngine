@@ -1,0 +1,62 @@
+# .github/workflows/ci.yml — the same commands a developer runs by hand, so they cannot rot.
+#
+# What it proves on every push:
+#   * every package type-checks under strict TypeScript
+#   * every package builds (esbuild bundle + tsc declarations)
+#   * the assertion harnesses pass: core maths, camera framing, settings persistence,
+#     interaction/picking, and the packaging invariants
+#   * the playground still builds with Vite (a real consumer of the library)
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build packages
+        run: npm run build
+
+      - name: Checks (core, camera, settings, interaction, package)
+        run: npm run check
+
+      - name: Playground build (a real consumer)
+        run: npm --workspace apps/playground run build
+
+  rust-plugin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: The optional Tauri crate compiles on its own
+        run: cargo check --manifest-path packages/tauri/src-tauri/Cargo.toml
+        continue-on-error: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: The template app type-checks
+        run: |
+          cd templates/starter
+          npm install
+          npm run build
